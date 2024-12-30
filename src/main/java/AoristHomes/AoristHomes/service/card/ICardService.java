@@ -1,5 +1,5 @@
 package AoristHomes.AoristHomes.service.card;
 
-public class ICardService {
+public interface ICardService {
     
 }
