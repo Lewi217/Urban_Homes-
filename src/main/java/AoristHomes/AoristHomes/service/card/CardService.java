@@ -25,6 +25,12 @@ public class CardService {
         return mapToDTO(card);
     }
 
+    // get card by userId
+    public CardDTO getCardByUserId(String userId) {
+        Card card = cardRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Card not found"));
+        return mapToDTO(card);
+    }
+
     // Edit card
     public CardDTO updateCard(String id, CardDTO cardDTO) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new RuntimeException("Card not found"));

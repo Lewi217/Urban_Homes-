@@ -16,19 +16,40 @@ public class CardController {
     // Add a new card
     @PostMapping("/add")
     public ResponseEntity<CardDTO> addCard(@RequestBody CardDTO cardDTO) {
-        return ResponseEntity.ok(cardService.addCard(cardDTO));
+        try {
+            return ResponseEntity.ok(cardService.addCard(cardDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+    // Get card by userId
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<CardDTO> getCardByUserId(@PathVariable String userId) {
+        try {
+            return ResponseEntity.ok(cardService.getCardByUserId(userId));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
     // Update card details
     @PutMapping("/{id}")
     public ResponseEntity<CardDTO> updateCard(@PathVariable String id, @RequestBody CardDTO cardDTO) {
-        return ResponseEntity.ok(cardService.updateCard(id, cardDTO));
+        try {
+            return ResponseEntity.ok(cardService.updateCard(id, cardDTO));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Delete card
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable String id) {
-        cardService.deleteCard(id);
-        return ResponseEntity.noContent().build();
+        try {
+            cardService.deleteCard(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
