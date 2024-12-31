@@ -1,7 +1,6 @@
 package AoristHomes.AoristHomes.dto;
 
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data

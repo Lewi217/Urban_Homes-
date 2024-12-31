@@ -1,0 +1,109 @@
+package AoristHomes.AoristHomes.service.user;
+
+import AoristHomes.AoristHomes.dto.LoginRequest;
+import AoristHomes.AoristHomes.dto.LoginResponse;
+import AoristHomes.AoristHomes.dto.RegisterRequest;
+import AoristHomes.AoristHomes.dto.UserDTO;
+import AoristHomes.AoristHomes.model.User;
+import AoristHomes.AoristHomes.repository.UserRepository;
+import AoristHomes.AoristHomes.security.JwtUtil;
+import AoristHomes.AoristHomes.utils.exceptions.CustomExceptionResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService implements IUserService{
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+
+    @Override
+    public UserDTO registerUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+        return mapToDTO(user);
+    }
+
+    @Override
+    public LoginResponse logInUser(LoginRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            String token = jwtUtil.generateToken(userDetails);
+
+            HashMap<String, Object> claims = new HashMap<>();
+            String refreshToken = jwtUtil.generateRefreshToken(claims, userDetails);
+            User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                    ()-> new CustomExceptionResponse("User Not found")
+            );
+            UserDTO userDTO = mapToDTO(user);
+
+            return LoginResponse.builder()
+                    .token(token)
+                    .refreshToken(refreshToken)
+                    .user(userDTO)
+                    .build();
+        } catch (AuthenticationException | CustomExceptionResponse e) {
+            throw new CustomExceptionResponse(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public User createUser(RegisterRequest request) {
+        User user = new User();
+        user.setFullName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserDTO> findUserByEmail(String email) {
+        return userRepository.findByEmail(email).map(this::mapToDTO);
+    }
+
+    @Override
+    public void depositFunds(String userId, Double amount) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (amount <= 0) throw new IllegalArgumentException("Deposit amount must be positive");
+        user.setWalletBalance(user.getWalletBalance() + amount);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void withdrawFunds(String userId, Double amount) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (amount <= 0 || user.getWalletBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient balance or invalid amount");
+        }
+        user.setWalletBalance(user.getWalletBalance() - amount);
+        userRepository.save(user);
+    }
+
+    private UserDTO mapToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setRoles(user.getRoles());
+        userDTO.setWalletBalance(user.getWalletBalance());
+        return userDTO;
+    }
+}
