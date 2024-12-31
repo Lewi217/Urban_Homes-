@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String password;
     private List<String> roles;
+    private Double walletBalance;
 
     @CreatedDate
     private LocalDateTime createdAt;
