@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface IUserService {
 
     UserDTO registerUser(User user);
-    Optional<UserDTO> findUserByEmail(String email);
+    //Optional<UserDTO> findUserByEmail(String email);
     void depositFunds(String userId, Double amount);
     void withdrawFunds(String userId, Double amount);
-    User createUser(RegisterRequest request);
+    //User createUser(RegisterRequest request);
     LoginResponse logInUser(LoginRequest request);
 }
