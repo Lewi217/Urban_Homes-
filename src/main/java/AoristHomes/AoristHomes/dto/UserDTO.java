@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class UserDTO {
     private String id;
-    private String fullName;
+    private String name;
     private String email;
     private List<String> roles;
     private Double walletBalance;

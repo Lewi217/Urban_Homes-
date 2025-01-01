@@ -41,43 +41,44 @@ public class UserService implements IUserService{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
             String token = jwtUtil.generateToken(userDetails);
-
             HashMap<String, Object> claims = new HashMap<>();
             String refreshToken = jwtUtil.generateRefreshToken(claims, userDetails);
-            User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                    ()-> new CustomExceptionResponse("User Not found")
-            );
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new CustomExceptionResponse("User not found"));
             UserDTO userDTO = mapToDTO(user);
-
             return LoginResponse.builder()
                     .token(token)
                     .refreshToken(refreshToken)
                     .user(userDTO)
                     .build();
-        } catch (AuthenticationException | CustomExceptionResponse e) {
-            throw new CustomExceptionResponse(e.getMessage());
+
+        } catch (AuthenticationException e) {
+            throw new CustomExceptionResponse("Authentication failed: " + e.getMessage());
+        } catch (CustomExceptionResponse e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomExceptionResponse("Unexpected error: " + e.getMessage());
         }
     }
 
 
-    @Override
-    public User createUser(RegisterRequest request) {
-        User user = new User();
-        user.setFullName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        return userRepository.save(user);
-    }
+//    @Override
+//    public User createUser(RegisterRequest request) {
+//        User user = new User();
+//        user.setFullName(request.getName());
+//        user.setEmail(request.getEmail());
+//        user.setPassword(passwordEncoder.encode(request.getPassword()));
+//
+//        return userRepository.save(user);
+//    }
 
-    @Override
-    public Optional<UserDTO> findUserByEmail(String email) {
-        return userRepository.findByEmail(email).map(this::mapToDTO);
-    }
+//    @Override
+//    public Optional<UserDTO> findUserByEmail(String email) {
+//        return userRepository.findByEmail(email).map(this::mapToDTO);
+//    }
 
     @Override
     public void depositFunds(String userId, Double amount) {
@@ -100,7 +101,7 @@ public class UserService implements IUserService{
     private UserDTO mapToDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
-        userDTO.setFullName(user.getFullName());
+        userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
         userDTO.setRoles(user.getRoles());
         userDTO.setWalletBalance(user.getWalletBalance());
