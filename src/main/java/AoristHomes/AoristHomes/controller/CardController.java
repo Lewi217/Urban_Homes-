@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_ERROR_MESSAGE;
 import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_SUCCESS_MESSAGE;
 
-@SuppressWarnings("rawtypes")
+
 @RestController
 @RequestMapping("/api/cards")
 @RequiredArgsConstructor

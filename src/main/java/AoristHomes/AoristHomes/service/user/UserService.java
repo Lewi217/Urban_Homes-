@@ -65,38 +65,7 @@ public class UserService implements IUserService{
 
 
 
-//    @Override
-//    public User createUser(RegisterRequest request) {
-//        User user = new User();
-//        user.setFullName(request.getName());
-//        user.setEmail(request.getEmail());
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
-//
-//        return userRepository.save(user);
-//    }
 
-//    @Override
-//    public Optional<UserDTO> findUserByEmail(String email) {
-//        return userRepository.findByEmail(email).map(this::mapToDTO);
-//    }
-
-    @Override
-    public void depositFunds(String userId, Double amount) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (amount <= 0) throw new IllegalArgumentException("Deposit amount must be positive");
-        user.setWalletBalance(user.getWalletBalance() + amount);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void withdrawFunds(String userId, Double amount) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        if (amount <= 0 || user.getWalletBalance() < amount) {
-            throw new IllegalArgumentException("Insufficient balance or invalid amount");
-        }
-        user.setWalletBalance(user.getWalletBalance() - amount);
-        userRepository.save(user);
-    }
 
     private UserDTO mapToDTO(User user) {
         UserDTO userDTO = new UserDTO();

@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,11 @@ public class User {
     @Id
     private String id;
     private String name;
+    @Indexed(unique = true)
     private String email;
     private String password;
     private List<String> roles;
-    private Double walletBalance;
+    private Double walletBalance = 0.0;
 
     @CreatedDate
     private LocalDateTime createdAt;

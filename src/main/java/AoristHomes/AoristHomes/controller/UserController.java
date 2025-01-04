@@ -1,9 +1,6 @@
 package AoristHomes.AoristHomes.controller;
 
-import AoristHomes.AoristHomes.dto.LoginRequest;
-import AoristHomes.AoristHomes.dto.LoginResponse;
-import AoristHomes.AoristHomes.dto.RegisterRequest;
-import AoristHomes.AoristHomes.dto.UserDTO;
+import AoristHomes.AoristHomes.dto.*;
 import AoristHomes.AoristHomes.model.User;
 import AoristHomes.AoristHomes.response.ApiResponse;
 import AoristHomes.AoristHomes.service.user.UserService;
@@ -11,16 +8,13 @@ import AoristHomes.AoristHomes.utils.exceptions.CustomExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_ERROR_MESSAGE;
 import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_SUCCESS_MESSAGE;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@SuppressWarnings("ALL")
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -54,6 +48,5 @@ public class UserController {
             return ResponseEntity.status(FORBIDDEN).body(new ApiResponse(REQUEST_ERROR_MESSAGE,e.getMessage()));
         }
     }
-
 
 }

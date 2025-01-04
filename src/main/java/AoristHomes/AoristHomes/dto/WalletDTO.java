@@ -9,4 +9,5 @@ public class WalletDTO {
     private String userId;
     private String agencyId;
     private BigDecimal balance;
+    private BigDecimal amount;
 }
