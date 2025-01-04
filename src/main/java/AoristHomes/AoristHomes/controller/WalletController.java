@@ -4,11 +4,12 @@ import AoristHomes.AoristHomes.dto.WalletDTO;
 import AoristHomes.AoristHomes.response.ApiResponse;
 import AoristHomes.AoristHomes.service.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+
+import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_ERROR_MESSAGE;
+import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_SUCCESS_MESSAGE;
 
 @RestController
 @RequestMapping("/api/wallets")
@@ -17,35 +18,35 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping("/deposit")
-    public ResponseEntity<ApiResponse<WalletDTO>> depositFunds(@RequestParam String userId, @RequestParam BigDecimal amount) {
+    public ResponseEntity<ApiResponse> depositFunds(@RequestBody WalletDTO walletRequest) {
         try {
-            WalletDTO updatedWallet = walletService.depositFunds(userId, amount);
-            return ResponseEntity.ok(new ApiResponse<>("Deposit successful", updatedWallet));
+            WalletDTO updatedWallet = walletService.depositFunds(walletRequest.getUserId(), walletRequest.getAmount());
+            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE, updatedWallet));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>("Error during deposit", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
         }
     }
+
 
     @PostMapping("/withdraw")
-    public ResponseEntity<ApiResponse<WalletDTO>> withdrawFunds(@RequestParam String userId, @RequestParam BigDecimal amount) {
+    public ResponseEntity<ApiResponse> withdrawFunds(@RequestBody WalletDTO walletRequest) {
         try {
-            WalletDTO updatedWallet = walletService.withdrawFunds(userId, amount);
-            return ResponseEntity.ok(new ApiResponse<>("Withdrawal successful", updatedWallet));
+            WalletDTO updatedWallet = walletService.withdrawFunds(walletRequest.getUserId(), walletRequest.getAmount());
+            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE, updatedWallet));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse<>("Error during withdrawal", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
         }
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<WalletDTO>> getWalletById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> getWalletById(@PathVariable String id) {
         try {
             WalletDTO wallet = walletService.getWalletById(id);
-            return ResponseEntity.ok(new ApiResponse<>("Wallet fetched successfully", wallet));
+            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE, wallet));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>("Wallet not found", e.getMessage()));
+            return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
         }
     }
+
 }
