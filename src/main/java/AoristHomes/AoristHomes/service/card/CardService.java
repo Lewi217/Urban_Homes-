@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CardService {
+public class CardService implements ICardService{
 
     private final CardRepository cardRepository;
 
     // Add card
+    @Override
     public CardDTO addCard(CardDTO cardDTO) {
         Card card = new Card();
         card.setUserId(cardDTO.getUserId());
@@ -26,12 +27,14 @@ public class CardService {
     }
 
     // get card by userId
+    @Override
     public CardDTO getCardByUserId(String userId) {
         Card card = cardRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Card not found"));
         return mapToDTO(card);
     }
 
     // Edit card
+    @Override
     public CardDTO updateCard(String id, CardDTO cardDTO) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new RuntimeException("Card not found"));
         card.setCardNumber(cardDTO.getCardNumber());
@@ -44,6 +47,7 @@ public class CardService {
     }
 
     // Delete card
+    @Override
     public void deleteCard(String id) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new RuntimeException("Card not found"));
         cardRepository.delete(card);
