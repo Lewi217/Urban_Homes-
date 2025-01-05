@@ -11,20 +11,23 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PropertyService {
+public class PropertyService implements IPropertyService{
     private final PropertyRepository propertyRepository;
 
+    @Override
     public PropertyDTO addProperty(PropertyDTO propertyDTO) {
         Property property = mapToEntity(propertyDTO);
         propertyRepository.save(property);
         return mapToDTO(property);
     }
 
+    @Override
     public PropertyDTO getPropertyById(String id) {
         Optional<Property> propertyOptional = propertyRepository.findById(id);
         return propertyOptional.map(this::mapToDTO).orElse(null);
     }
 
+    @Override
     public PropertyDTO updateProperty(String id, PropertyDTO propertyDTO) {
         Optional<Property> propertyOptional = propertyRepository.findById(id);
         if (propertyOptional.isPresent()) {
@@ -55,6 +58,7 @@ public class PropertyService {
         }
     }
 
+    @Override
     public boolean deleteProperty(String id) {
         if (propertyRepository.existsById(id)) {
             propertyRepository.deleteById(id);
