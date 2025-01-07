@@ -10,7 +10,4 @@ import java.util.Optional;
 @Repository
 public interface AgencyRepository extends MongoRepository<Agency, String> {
 
-    Optional<Agency> findById(String id);
-
-
 }
