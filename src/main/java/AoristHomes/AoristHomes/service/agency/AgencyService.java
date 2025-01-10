@@ -20,17 +20,20 @@ public class AgencyService implements IAgencyService{
      private final AgencyRepository agencyRepository;
      private final PropertyRepository propertyRepository;
 
+     @Override
      public AgencyDTO createAgency(AgencyDTO agencyDTO){
          Agency agency = mapToEntity(agencyDTO);
          agencyRepository.save(agency);
          return mapToDTO(agency);
      }
 
+     @Override
     public AgencyDTO getAgencyById(String id) {
         Optional<Agency> agencyOptional = agencyRepository.findById(id);
         return agencyOptional.map(this::mapToDTO).orElse(null);
     }
 
+    @Override
     public AgencyDTO updateAgency(String id, AgencyDTO agencyDTO) {
         Optional<Agency> agencyOptional = agencyRepository.findById(id);
         if (agencyOptional.isPresent()) {
@@ -45,6 +48,7 @@ public class AgencyService implements IAgencyService{
         return null;
     }
 
+    @Override
     public boolean deleteAgency(String id) {
         if (agencyRepository.existsById(id)) {
             agencyRepository.deleteById(id);
@@ -53,6 +57,7 @@ public class AgencyService implements IAgencyService{
         return false;
     }
 
+    @Override
     public boolean withdrawFromWallet(String agencyId, BigDecimal amount) {
         Optional<Agency> agencyOptional = agencyRepository.findById(agencyId);
         if (agencyOptional.isPresent()) {
@@ -66,6 +71,7 @@ public class AgencyService implements IAgencyService{
         return false;
     }
 
+    @Override
     public List<PropertyDTO> listPropertiesForInvestment(String agencyId) {
         Optional<Agency> agencyOptional = agencyRepository.findById(agencyId);
         if (agencyOptional.isPresent()) {
@@ -88,9 +94,39 @@ public class AgencyService implements IAgencyService{
         return agency;
     }
 
+    private AgencyDTO mapToDTO(Agency agency) {
+        AgencyDTO agencyDTO = new AgencyDTO();
+        agencyDTO.setId(agency.getId());
+        agencyDTO.setName(agency.getName());
+        agencyDTO.setDescription(agency.getDescription());
+        agencyDTO.setWalletBalance(agency.getWalletBalance());
+        agencyDTO.setPropertyIds(agency.getPropertyIds());
+        return agencyDTO;
+    }
+
     private PropertyDTO mapToPropertyDTO(Property property) {
         PropertyDTO propertyDTO = new PropertyDTO();
-        // pending...
+        propertyDTO.setId(property.getId());
+        propertyDTO.setName(propertyDTO.getName());
+        propertyDTO.setDescription(property.getDescription());
+        propertyDTO.setLocation(propertyDTO.getLocation());
+        propertyDTO.setPrice(propertyDTO.getPrice());
+        propertyDTO.setCoverPhoto(propertyDTO.getCoverPhoto());
+        propertyDTO.setCoverVideo(propertyDTO.getCoverVideo());
+        propertyDTO.setPanoramas(propertyDTO.getPanoramas());
+        propertyDTO.setTitle(propertyDTO.getTitle());
+        propertyDTO.setArea(propertyDTO.getArea());
+        propertyDTO.setBedrooms(propertyDTO.getBedrooms());
+        propertyDTO.setBathrooms(propertyDTO.getBathrooms());
+        propertyDTO.setPhotos(propertyDTO.getPhotos());
+        propertyDTO.setAmenities(propertyDTO.getAmenities());
+        propertyDTO.setFurnishingStatus(propertyDTO.getFurnishingStatus());
+        propertyDTO.setAvailability(propertyDTO.getAvailability());
+        propertyDTO.setTotalInvested(propertyDTO.getTotalInvested());
+        propertyDTO.setAgencyId(propertyDTO.getAgencyId());
+        propertyDTO.setAvailableForInvestment(propertyDTO.getAvailableForInvestment());
+        propertyDTO.setCreatedAt(propertyDTO.getCreatedAt());
+        propertyDTO.setUpdatedAt(propertyDTO.getUpdatedAt());
         return propertyDTO;
     }
 }
