@@ -1,4 +1,4 @@
-package AoristHomes.AoristHomes.utils;
+package AoristHomes.AoristHomes.utils.enums;
 
 public enum TransactionType {
     DEPOSIT,
