@@ -16,6 +16,7 @@ public class Agency {
     @Id
     private String id;
     private String name;
+    private String email;
     private String description;
     private BigDecimal walletBalance;
     private List<String> propertyIds;
