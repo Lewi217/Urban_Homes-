@@ -79,5 +79,9 @@ public class AdminService {
         }).toList();
     }
 
+    public void deleteProperty(String id) {
+        propertyRepository.deleteById(id);
+    }
+
 }
 
