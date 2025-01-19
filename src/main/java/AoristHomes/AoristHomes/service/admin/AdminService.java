@@ -2,7 +2,9 @@ package AoristHomes.AoristHomes.service.admin;
 
 import AoristHomes.AoristHomes.dto.AgencyDTO;
 import AoristHomes.AoristHomes.dto.PropertyDTO;
+import AoristHomes.AoristHomes.dto.UserInvestmentDTO;
 import AoristHomes.AoristHomes.model.Property;
+import AoristHomes.AoristHomes.model.UserInvestment;
 import AoristHomes.AoristHomes.repository.AgencyRepository;
 import AoristHomes.AoristHomes.repository.PropertyRepository;
 import AoristHomes.AoristHomes.repository.UserInvestmentRepository;
@@ -81,6 +83,30 @@ public class AdminService {
 
     public void deleteProperty(String id) {
         propertyRepository.deleteById(id);
+    }
+
+    public List<UserInvestmentDTO> getInvestments(String userId, String propertyId) {
+        List<UserInvestment> userInvestments;
+
+        if (userId != null && propertyId != null) {
+            userInvestments = userInvestmentRepository.findByUserIdAndPropertyId(userId, propertyId);
+        } else if (userId != null) {
+            userInvestments = userInvestmentRepository.findByUserId(userId);
+        } else if (propertyId != null) {
+            userInvestments = userInvestmentRepository.findByPropertyId(propertyId);
+        } else {
+            userInvestments = userInvestmentRepository.findAll();
+        }
+
+        // Map UserInvestment entities to UserInvestmentDTOs
+        return userInvestments.stream().map(investment -> {
+            UserInvestmentDTO dto = new UserInvestmentDTO();
+            dto.setId(investment.getId());
+            dto.setUserId(investment.getUserId());
+            dto.setPropertyId(investment.getPropertyId());
+            dto.setInvestmentAmount(investment.getInvestmentAmount());
+            return dto;
+        }).toList();
     }
 
 }
