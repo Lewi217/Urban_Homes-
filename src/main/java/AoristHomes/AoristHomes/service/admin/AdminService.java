@@ -12,6 +12,7 @@ import AoristHomes.AoristHomes.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +108,12 @@ public class AdminService {
             dto.setInvestmentAmount(investment.getInvestmentAmount());
             return dto;
         }).toList();
+    }
+
+    private BigDecimal calculateTotalProfit() {
+        return userInvestmentRepository.findAll().stream()
+                .map(investment -> investment.getInvestmentAmount().multiply(BigDecimal.valueOf(0.05))) // 5% commission
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

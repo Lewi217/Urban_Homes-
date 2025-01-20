@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserInvestmentRepository extends MongoRepository<UserInvestment, String> {
     List<UserInvestment> findByUserId(String userId);
+    List<UserInvestment> findByPropertyId(String propertyId);
+    List<UserInvestment> findByUserIdAndPropertyId(String userId, String propertyId);
 }
