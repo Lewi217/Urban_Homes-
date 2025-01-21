@@ -19,13 +19,14 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminService implements IAdminService{
 
     private final AgencyRepository agencyRepository;
     private final UserRepository userRepository;
     private final PropertyRepository propertyRepository;
     private final UserInvestmentRepository userInvestmentRepository;
 
+    @Override
     public Map<String, Object> getDashboardMetrics(){
         Map<String, Object> metrics = new HashMap<>();
 
@@ -37,6 +38,7 @@ public class AdminService {
         return metrics;
     }
 
+    @Override
     public List<AgencyDTO> getAllAgencies() {
         return agencyRepository.findAll().stream().map(agency ->
                 new AgencyDTO(
@@ -50,10 +52,12 @@ public class AdminService {
         ).toList();
     }
 
+    @Override
     public void deleteAgency(String id) {
         agencyRepository.deleteById(id);
     }
 
+    @Override
     public List<PropertyDTO> getAllProperties() {
         return propertyRepository.findAll().stream().map(property -> {
             PropertyDTO dto = new PropertyDTO();
@@ -82,10 +86,12 @@ public class AdminService {
         }).toList();
     }
 
+    @Override
     public void deleteProperty(String id) {
         propertyRepository.deleteById(id);
     }
 
+    @Override
     public List<UserInvestmentDTO> getInvestments(String userId, String propertyId) {
         List<UserInvestment> userInvestments;
 
@@ -99,7 +105,7 @@ public class AdminService {
             userInvestments = userInvestmentRepository.findAll();
         }
 
-        // Map UserInvestment entities to UserInvestmentDTOs
+
         return userInvestments.stream().map(investment -> {
             UserInvestmentDTO dto = new UserInvestmentDTO();
             dto.setId(investment.getId());
