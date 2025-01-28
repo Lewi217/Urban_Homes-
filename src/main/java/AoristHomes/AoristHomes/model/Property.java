@@ -1,5 +1,6 @@
 package AoristHomes.AoristHomes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -31,6 +32,8 @@ public class Property {
     private Boolean furnishingStatus;
     private Boolean availability;
     private BigDecimal totalInvested = BigDecimal.ZERO;
+
+    @JsonIgnore
     private String agencyId;
     private List<String> availableForInvestment;
     private LocalDateTime createdAt = LocalDateTime.now();

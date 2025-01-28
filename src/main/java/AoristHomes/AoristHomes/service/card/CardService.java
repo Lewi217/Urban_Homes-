@@ -36,7 +36,10 @@ public class CardService implements ICardService{
     // Edit card
     @Override
     public CardDTO updateCard(String id, CardDTO cardDTO) {
-        Card card = cardRepository.findById(id).orElseThrow(() -> new RuntimeException("Card not found"));
+        Card card = cardRepository.findById(id).orElse(null);
+        if (card == null) {
+            return null;
+        }
         card.setCardNumber(cardDTO.getCardNumber());
         card.setCardHolderName(cardDTO.getCardHolderName());
         card.setExpiryDate(cardDTO.getExpiryDate());

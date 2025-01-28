@@ -95,13 +95,14 @@ public class AgencyService implements IAgencyService{
     }
 
     private AgencyDTO mapToDTO(Agency agency) {
-        AgencyDTO agencyDTO = new AgencyDTO();
-        agencyDTO.setId(agency.getId());
-        agencyDTO.setName(agency.getName());
-        agencyDTO.setDescription(agency.getDescription());
-        agencyDTO.setWalletBalance(agency.getWalletBalance());
-        agencyDTO.setPropertyIds(agency.getPropertyIds());
-        return agencyDTO;
+        return new AgencyDTO(
+                agency.getId(),
+                agency.getName(),
+                agency.getEmail(),
+                agency.getDescription(),
+                agency.getWalletBalance(),
+                agency.getPropertyIds()
+        );
     }
 
     private PropertyDTO mapToPropertyDTO(Property property) {
@@ -123,7 +124,7 @@ public class AgencyService implements IAgencyService{
         propertyDTO.setFurnishingStatus(propertyDTO.getFurnishingStatus());
         propertyDTO.setAvailability(propertyDTO.getAvailability());
         propertyDTO.setTotalInvested(propertyDTO.getTotalInvested());
-        propertyDTO.setAgencyId(propertyDTO.getAgencyId());
+        propertyDTO.setAgencyId(property.getAgencyId());
         propertyDTO.setAvailableForInvestment(propertyDTO.getAvailableForInvestment());
         propertyDTO.setCreatedAt(propertyDTO.getCreatedAt());
         propertyDTO.setUpdatedAt(propertyDTO.getUpdatedAt());
