@@ -50,9 +50,10 @@ public class PropertyController {
     public ResponseEntity<ApiResponse> deleteProperty(@PathVariable String id) {
         try {
             propertyService.deleteProperty(id);
-            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE, deleteProperty(id)));
+            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE, "Property deleted successfully"));  // Return success response
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
+            return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));  // Return error response in case of failure
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package AoristHomes.AoristHomes.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.*;
@@ -19,6 +20,8 @@ public class Agency {
     private String email;
     private String description;
     private BigDecimal walletBalance;
+
+    @JsonBackReference
     private List<String> propertyIds;
 
     @CreatedDate

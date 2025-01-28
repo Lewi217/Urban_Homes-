@@ -2,10 +2,9 @@ package AoristHomes.AoristHomes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.LastModifiedBy;
+
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

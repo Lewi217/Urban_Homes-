@@ -69,7 +69,7 @@ public class UserInvestmentController {
     public ResponseEntity<ApiResponse> deleteInvestment(@PathVariable String id) {
         try {
             userInvestmentService.deleteInvestment(id);
-            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE,deleteInvestment(id)));
+            return ResponseEntity.ok().body(new ApiResponse(REQUEST_SUCCESS_MESSAGE,"Deleted Investment Successfully"));
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
