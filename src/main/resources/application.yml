@@ -11,5 +11,6 @@ spring:
   payment-url: ${paymentUrl:${PAYMENT_URL:https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest}}
   callback-url: ${callback_url:${CALLBACK_URL:https://your-default-callback}}
   notification-id: ${notification_id:${NOTIFICATION_ID:defaultNotificationId}}
+
   status-url: ${Status_url:${STATUS_URL:https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus}}
 
