@@ -1,6 +1,6 @@
 spring:
   config:
-    import: "keys.properties"
+    import: "optional:classpath:keys.properties"
   data:
     mongodb:
       uri: mongodb://localhost:27017/AoristHomes?authSource=admin
