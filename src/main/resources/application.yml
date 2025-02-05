@@ -4,3 +4,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/AoristHomes?authSource=admin
+  secret-key: ${secret_key:${JWT_SECRET:dummySecret}}
+  consumer-key: ${consumer_key:${CONSUMER_KEY:dummyConsumerKey}}
+  consumer-secret: ${consumer_secret:${CONSUMER_SECRET:dummyConsumerSecret}}
+  auth-url: ${authUrl:${AUTH_URL:https://pay.pesapal.com/v3/api/Auth/RequestToken}}
+  payment-url: ${paymentUrl:${PAYMENT_URL:https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest}}
+  callback-url: ${callback_url:${CALLBACK_URL:https://your-default-callback}}
+  notification-id: ${notification_id:${NOTIFICATION_ID:defaultNotificationId}}
+
+  status-url: ${Status_url:${STATUS_URL:https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus}}
+
