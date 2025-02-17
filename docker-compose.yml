@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  aorist-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aorist-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/main/resources/keys.properties:/app/config/keys.properties
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:file:/app/config/keys.properties
+    depends_on:
+      - aorist-mongo
+    restart: always
+
+  aorist-mongo:
+    image: mongo:6.0
+    container_name: aorist-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: AoristHomes
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+volumes:
+  mongo-data:
