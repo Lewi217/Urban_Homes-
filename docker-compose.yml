@@ -19,12 +19,8 @@ services:
   aorist-mongo:
     image: mongo:6.0
     container_name: aorist-mongo
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: AoristHomes
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     volumes:
       - mongo-data:/data/db
     restart: always
