@@ -4,6 +4,7 @@ import AoristHomes.AoristHomes.dto.UserInvestmentDTO;
 import AoristHomes.AoristHomes.model.UserInvestment;
 import AoristHomes.AoristHomes.repository.UserInvestmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserInvestmentService implements IUserInvestmentService {
     private final UserInvestmentRepository userInvestmentRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public UserInvestmentDTO addUserInvestment(UserInvestmentDTO userInvestmentDTO) {
@@ -56,20 +58,10 @@ public class UserInvestmentService implements IUserInvestmentService {
     }
 
     private UserInvestment mapToEntity(UserInvestmentDTO userInvestmentDTO) {
-        UserInvestment userInvestment = new UserInvestment();
-        userInvestment.setId(userInvestmentDTO.getId());
-        userInvestment.setUserId(userInvestmentDTO.getUserId());
-        userInvestment.setPropertyId(userInvestmentDTO.getPropertyId());
-        userInvestment.setInvestmentAmount(userInvestmentDTO.getInvestmentAmount());
-        return userInvestment;
+        return modelMapper.map(userInvestmentDTO, UserInvestment.class);
     }
 
     private UserInvestmentDTO mapToDTO(UserInvestment userInvestment) {
-        UserInvestmentDTO userInvestmentDTO = new UserInvestmentDTO();
-        userInvestmentDTO.setId(userInvestment.getId());
-        userInvestmentDTO.setUserId(userInvestment.getUserId());
-        userInvestmentDTO.setPropertyId(userInvestment.getPropertyId());
-        userInvestmentDTO.setInvestmentAmount(userInvestment.getInvestmentAmount());
-        return userInvestmentDTO;
+        return modelMapper.map(userInvestment, UserInvestmentDTO.class);
     }
 }

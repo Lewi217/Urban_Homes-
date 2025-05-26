@@ -31,9 +31,9 @@ public class PesapalPaymentServices {
         requestBody.put("currency", "KES");
         requestBody.put("amount", amount);
         requestBody.put("description", "Payment for Aorist Homes");
-        requestBody.put("callback_url", "https://eb9b-196-216-90-169.ngrok-free.app/api/pesapal/callback");
-        requestBody.put("notification_id", "78220df4-c10a-4106-8f57-dc353e63d87f"); // Get from Pesapal portal
-        requestBody.put("billing_address", Map.of("email", email, "phone_number", phoneNumber));
+        requestBody.put("callback.url", "https://eb9b-196-216-90-169.ngrok-free.app/api/pesapal/callback");
+        requestBody.put("notification.id", "78220df4-c10a-4106-8f57-dc353e63d87f"); // Get from Pesapal portal
+        requestBody.put("billing.address", Map.of("email", email, "phone_number", phoneNumber));
 
         HttpEntity<Map<String, Object>> request =  new HttpEntity<>(requestBody, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(paymentUrl,request, Map.class);

@@ -2,13 +2,13 @@ package AoristHomes.AoristHomes.service.user;
 
 import AoristHomes.AoristHomes.dto.LoginRequest;
 import AoristHomes.AoristHomes.dto.LoginResponse;
-import AoristHomes.AoristHomes.dto.RegisterRequest;
 import AoristHomes.AoristHomes.dto.UserDTO;
 import AoristHomes.AoristHomes.model.User;
 import AoristHomes.AoristHomes.repository.UserRepository;
 import AoristHomes.AoristHomes.security.JwtUtil;
 import AoristHomes.AoristHomes.utils.exceptions.CustomExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +27,7 @@ public class UserService implements IUserService{
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
 
     @Override
     public UserDTO registerUser(User user){
@@ -63,17 +64,7 @@ public class UserService implements IUserService{
         }
     }
 
-
-
-
-
     private UserDTO mapToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRoles(user.getRoles());
-        userDTO.setWalletBalance(user.getWalletBalance());
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
     }
 }
