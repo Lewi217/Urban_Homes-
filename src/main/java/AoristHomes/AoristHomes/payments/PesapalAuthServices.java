@@ -11,10 +11,10 @@ import java.util.Map;
 
 @Service
 public class PesapalAuthServices {
-    @Value("${consumer_key}")
+    @Value("${consumer.key}")
     private String consumerKey;
 
-    @Value("${consumer_secret}")
+    @Value("${consumer.secret}")
     private String consumerSecret;
 
     private final String authUrl = "https://pay.pesapal.com/v3/api/Auth/RequestToken";
@@ -26,8 +26,8 @@ public class PesapalAuthServices {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("consumer_key",consumerKey);
-        requestBody.put("consumer_secret",consumerSecret);
+        requestBody.put("consumer.key",consumerKey);
+        requestBody.put("consumer.secret",consumerSecret);
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(requestBody, headers);
 

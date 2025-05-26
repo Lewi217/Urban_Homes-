@@ -4,6 +4,7 @@ import AoristHomes.AoristHomes.dto.CardDTO;
 import AoristHomes.AoristHomes.model.Card;
 import AoristHomes.AoristHomes.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class CardService implements ICardService{
 
     private final CardRepository cardRepository;
+    private final ModelMapper modelMapper;
 
     // Add card
     @Override
@@ -56,15 +58,8 @@ public class CardService implements ICardService{
         cardRepository.delete(card);
     }
 
-    // Map model to DTO
+
     private CardDTO mapToDTO(Card card) {
-        CardDTO cardDTO = new CardDTO();
-        cardDTO.setId(card.getId());
-        cardDTO.setUserId(card.getUserId());
-        cardDTO.setCardNumber(card.getCardNumber());
-        cardDTO.setCardHolderName(card.getCardHolderName());
-        cardDTO.setExpiryDate(card.getExpiryDate());
-        cardDTO.setCvv(card.getCvv());
-        return cardDTO;
+        return modelMapper.map(card, CardDTO.class);
     }
 }

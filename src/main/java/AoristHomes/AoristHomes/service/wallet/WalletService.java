@@ -4,6 +4,7 @@ import AoristHomes.AoristHomes.dto.WalletDTO;
 import AoristHomes.AoristHomes.model.Wallet;
 import AoristHomes.AoristHomes.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class WalletService implements IWalletService {
     private final WalletRepository walletRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public WalletDTO depositFunds(String userId, BigDecimal amount) {
@@ -51,11 +53,6 @@ public class WalletService implements IWalletService {
     }
 
     private WalletDTO mapToDTO(Wallet wallet) {
-        WalletDTO walletDTO = new WalletDTO();
-        walletDTO.setId(wallet.getId());
-        walletDTO.setUserId(wallet.getUserId());
-        walletDTO.setAgencyId(wallet.getAgencyId());
-        walletDTO.setBalance(wallet.getBalance());
-        return walletDTO;
+        return modelMapper.map(wallet, WalletDTO.class);
     }
 }
