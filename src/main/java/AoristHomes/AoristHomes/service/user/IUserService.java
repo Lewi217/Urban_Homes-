@@ -1,15 +1,14 @@
 package AoristHomes.AoristHomes.service.user;
 
-import AoristHomes.AoristHomes.dto.LoginRequest;
-import AoristHomes.AoristHomes.dto.LoginResponse;
-import AoristHomes.AoristHomes.dto.RegisterRequest;
-import AoristHomes.AoristHomes.dto.UserDTO;
+import AoristHomes.AoristHomes.dto.*;
 import AoristHomes.AoristHomes.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
 
     UserDTO registerUser(User user);
     LoginResponse logInUser(LoginRequest request);
+    List<HoldingDTO> getHoldingsByUserId(String userId);
 }
