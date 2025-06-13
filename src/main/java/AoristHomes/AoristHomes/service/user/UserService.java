@@ -73,11 +73,11 @@ public class UserService implements IUserService {
     public List<HoldingDTO> getHoldingsByUserId(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomExceptionResponse("User not found"));
-        List<UserInvestment> userInvestments = userInvestmentRepository.findByUserId(user.getId());
+        List<UserInvestment> userInvestments = userInvestmentRepository.findByUserId(userId);
         return userInvestments.stream().map(inv -> {
-            Property p = propertyRepository.findById(String.valueOf(inv.getPropertyId()))
+            Property p = propertyRepository.findById(inv.getPropertyId())
                     .orElseThrow(() -> new CustomExceptionResponse("Property not found"));
-            BigDecimal total = userInvestmentRepository.findByPropertyId(p.getId())
+            BigDecimal total = userInvestmentRepository.findByPropertyId(inv.getPropertyId())
                     .stream()
                     .map(UserInvestment::getInvestmentAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -86,6 +86,7 @@ public class UserService implements IUserService {
                     .divide(total, 4, RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(100))
                     : BigDecimal.ZERO;
+
             return new HoldingDTO(
                     p.getId(),
                     p.getName(),
