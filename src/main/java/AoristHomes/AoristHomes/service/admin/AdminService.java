@@ -1,15 +1,14 @@
 package AoristHomes.AoristHomes.service.admin;
 
-import AoristHomes.AoristHomes.dto.AgencyDTO;
-import AoristHomes.AoristHomes.dto.PropertyDTO;
-import AoristHomes.AoristHomes.dto.UserInvestmentDTO;
-import AoristHomes.AoristHomes.model.Property;
+import AoristHomes.AoristHomes.dto.*;
+import AoristHomes.AoristHomes.model.Admin;
 import AoristHomes.AoristHomes.model.UserInvestment;
-import AoristHomes.AoristHomes.repository.AgencyRepository;
-import AoristHomes.AoristHomes.repository.PropertyRepository;
-import AoristHomes.AoristHomes.repository.UserInvestmentRepository;
-import AoristHomes.AoristHomes.repository.UserRepository;
+import AoristHomes.AoristHomes.repository.*;
+import AoristHomes.AoristHomes.security.JwtUtil;
+import AoristHomes.AoristHomes.utils.exceptions.CustomExceptionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,7 +24,36 @@ public class AdminService implements IAdminService{
     private final UserRepository userRepository;
     private final PropertyRepository propertyRepository;
     private final UserInvestmentRepository userInvestmentRepository;
+    private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
+    @Override
+    public AdminLoginResponse loginAdmin(LoginRequest request) {
+        Admin admin = adminRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CustomExceptionResponse("Admin not found"));
+        if (!passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
+            throw new CustomExceptionResponse("Invalid credentials");
+        }
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+                .withUsername(admin.getEmail())
+                .password(admin.getPassword())
+                .roles("ADMIN")
+                .build();
+        String token        = jwtUtil.generateToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(new HashMap<>(), userDetails);
+        AdminDTO adminDTO = new AdminDTO();
+        adminDTO.setId(admin.getId());
+        adminDTO.setFullName(admin.getFullName());
+        adminDTO.setEmail(admin.getEmail());
+        adminDTO.setRole(admin.getRole());
+
+        return AdminLoginResponse.builder()
+                .token(token)
+                .refreshToken(refreshToken)
+                .admin(adminDTO)
+                .build();
+    }
     @Override
     public Map<String, Object> getDashboardMetrics(){
         Map<String, Object> metrics = new HashMap<>();

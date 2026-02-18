@@ -1,13 +1,15 @@
 package AoristHomes.AoristHomes.controller;
 
-import AoristHomes.AoristHomes.dto.AgencyDTO;
-import AoristHomes.AoristHomes.dto.InvestmentRequestDTO;
-import AoristHomes.AoristHomes.dto.PropertyDTO;
-import AoristHomes.AoristHomes.dto.UserInvestmentDTO;
+import AoristHomes.AoristHomes.dto.*;
+import AoristHomes.AoristHomes.model.Admin;
+import AoristHomes.AoristHomes.repository.AdminRepository;
 import AoristHomes.AoristHomes.response.ApiResponse;
 import AoristHomes.AoristHomes.service.admin.AdminService;
+import AoristHomes.AoristHomes.utils.enums.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,43 @@ import static AoristHomes.AoristHomes.utils.exceptions.ApiResponseUtils.REQUEST_
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
+    private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @PostMapping("/setup")
+    public ResponseEntity<ApiResponse> setupAdmin(@RequestBody LoginRequest request) {
+        try {
+            // Prevent duplicate admin
+            if (adminRepository.findByEmail(request.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest()
+                        .body(new ApiResponse(REQUEST_ERROR_MESSAGE, "Admin already exists"));
+            }
+
+            Admin admin = new Admin();
+            admin.setFullName("Super Admin");
+            admin.setEmail(request.getEmail());
+            admin.setPassword(passwordEncoder.encode(request.getPassword()));
+            admin.setRole(Role.ADMIN);
+            adminRepository.save(admin);
+
+            return ResponseEntity.ok(new ApiResponse(REQUEST_SUCCESS_MESSAGE, "Admin created successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> adminLogin(@RequestBody LoginRequest request) {
+        try {
+            AdminLoginResponse response = adminService.loginAdmin(request);
+            return ResponseEntity.ok(new ApiResponse(REQUEST_SUCCESS_MESSAGE, response));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(new ApiResponse(REQUEST_ERROR_MESSAGE, e.getMessage()));
+        }
+    }
 
    @GetMapping("/dashboard-metrics")
     public ResponseEntity<ApiResponse> getDashboardMetrics(){
