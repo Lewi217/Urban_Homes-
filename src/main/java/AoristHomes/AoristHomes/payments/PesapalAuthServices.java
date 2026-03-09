@@ -11,10 +11,10 @@ import java.util.Map;
 
 @Service
 public class PesapalAuthServices {
-    @Value("${consumer.key}")
+    @Value("${CONSUMER.KEY}")
     private String consumerKey;
 
-    @Value("${consumer.secret}")
+    @Value("${CONSUMER.SECRET}")
     private String consumerSecret;
 
     private final String authUrl = "https://pay.pesapal.com/v3/api/Auth/RequestToken";

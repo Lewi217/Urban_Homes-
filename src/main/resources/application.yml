@@ -1,26 +1,28 @@
 server:
-  port: 8078
+  port: 8081
+
 spring:
   devtools:
     restart:
       enabled: false
-  config:
-    import: "optional:classpath:keys.properties"
   data:
     mongodb:
-      uri: ${db.url}
+      uri: ${DB_URI:mongodb://localhost:27017/AoristHomes}
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   secret:
-    key: ${secret.key:${JWT_SECRET:dummySecret}}
+    key: ${JWT_SECRET:dummySecret}
   consumer:
-    key: ${consumer.key:${CONSUMER.KEY:dummyConsumerKey}}
-    secret: ${consumer.secret:${CONSUMER.SECRET:dummyConsumerSecret}}
+    key: ${CONSUMER_KEY:dummyConsumerKey}
+    secret: ${CONSUMER_SECRET:dummyConsumerSecret}
   auth:
-    url: ${authUrl:${AUTH.URL:https://pay.pesapal.com/v3/api/Auth/RequestToken}}
+    url: ${AUTH_URL:https://pay.pesapal.com/v3/api/Auth/RequestToken}
   payment:
-    url: ${paymentUrl:${PAYMENT.URL:https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest}}
+    url: ${PAYMENT_URL:https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest}
   callback:
-    url: ${callback.url:${CALLBACK.URL:https://your-default-callback}}
+    url: ${CALLBACK_URL:https://your-default-callback}
   notification:
-    id: ${notification.id:${NOTIFICATION.ID:defaultNotificationId}}
+    id: ${NOTIFICATION_ID:defaultNotificationId}
   status:
-    url: ${Status_url:${STATUS.URL:https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus}}
+    url: ${STATUS_URL:https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus}

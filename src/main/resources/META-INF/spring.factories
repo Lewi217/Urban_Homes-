@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationContextInitializer=\
+AoristHomes.AoristHomes.config.EnvInitializer
