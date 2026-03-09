@@ -1,6 +1,5 @@
 package AoristHomes.AoristHomes.security;
 
-import AoristHomes.AoristHomes.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -21,7 +20,7 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME_ACCESS = 864000000L;  // 10 days for access token
     private static final long EXPIRATION_TIME_REFRESH = 1814400000L;  // 21 days for refresh token
 
-    public JwtUtil(@Value("${secret.key}") String secretKey) { //Removed the exposed secrets
+    public JwtUtil(@Value("${SECRET.KEY}") String secretKey) {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
