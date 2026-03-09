@@ -1,6 +1,6 @@
 # UrbanHomes
 
-AoristHomes is a Spring Boot application that provides a platform for managing properties, user investments, transactions, and more. This application uses MongoDB as its database.
+UrbanHomes is a Spring Boot application that provides a platform for managing properties, user investments, transactions, and more. This application uses MongoDB as its database.
 
 ## Table of Contents
 
